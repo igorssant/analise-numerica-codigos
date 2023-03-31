@@ -11,6 +11,7 @@ public class MetodoNewtonRaphson extends ModeloMatematico{
     private double fxAnterior;
     private double derivadaFxAnterior;
     private double tolerancia;
+    private double erro;
     
     /**
      * Contrutor de classe vazio.
@@ -134,6 +135,14 @@ public class MetodoNewtonRaphson extends ModeloMatematico{
     public void setTolerancia(double tolerancia){
         this.tolerancia = tolerancia;
     }
+
+    public double getErro() {
+        return erro;
+    }
+
+    public void setErro(double erro) {
+        this.erro = erro;
+    }
     
     /**
      * Metodo gerarNovoXk.
@@ -153,5 +162,17 @@ public class MetodoNewtonRaphson extends ModeloMatematico{
         
         this.xAtual = this.xAnterior - (this.fxAnterior / this.derivadaFxAnterior);
         this.xAnterior = auxiliar;
+    }
+    
+    /**
+     * Metodo gerarErro
+     * Nao recebe nenhum parametro.
+     * Nao retorna nada.
+     * Gera um novo erro absoluto
+     * a partir de x1 e x0.
+     */
+    @Override
+    public void gerarErro(){
+        this.erro = Math.abs( (this.xAtual - this.xAnterior) / this.xAnterior );
     }
 } // Fim de classe MetodoNewtonRaphson
