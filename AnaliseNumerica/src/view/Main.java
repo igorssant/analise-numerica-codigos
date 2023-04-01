@@ -43,52 +43,40 @@ public class Main{
     */
     public static void bissexao(int limiteDeInteracoes, String funcao){
         int contador = 0;
-        double verificaMudancaDeSinal = 0.0;
+        double fC = 0.0;
         
-        objetoBissexao.gerarEstimativa();
-        objetoBissexao.gerarErro();
-        objetoBissexao.setFAnterior(
-                funcao(
-                        funcao,
-                        objetoBissexao.getIntervaloInferior()
-                )
-        );
-        objetoBissexao.setFAtual(0.0);
-        
-        if(objetoBissexao.getErro() < 0.0){
-            objetoBissexao.setErro( objetoBissexao.getErro() * (-1) );
-        }
-        
-        while( objetoBissexao.getErro() >= objetoBissexao.getTolerancia() && contador < limiteDeInteracoes ){
+        do{
+            objetoBissexao.gerarEstimativa();
+            objetoBissexao.setFAnterior(
+                    funcao(
+                            funcao,
+                            objetoBissexao.getIntervaloSuperior()
+                    )
+            );
             objetoBissexao.setFAtual(
                     funcao(
                             funcao,
-                            objetoBissexao.getEstimativa()
+                            objetoBissexao.getIntervaloInferior()
                     )
             );
-            verificaMudancaDeSinal = objetoBissexao.getFAnterior() * objetoBissexao.getFAtual();
+            fC = funcao(
+                    funcao,
+                    objetoBissexao.getEstimativa()
+            );
             
-            if(verificaMudancaDeSinal < 0.0){
-                objetoBissexao.setIntervaloSuperior(objetoBissexao.getEstimativa());
-            }
-            
-            else if(verificaMudancaDeSinal > 0.0){
-                
+            if(objetoBissexao.getFAnterior() * fC < 0.0){
+                objetoBissexao.setIntervaloInferior(objetoBissexao.getEstimativa());
+                objetoBissexao.setFAtual(fC);
             }
             
             else{
-                break;
-            }
-            
-            objetoBissexao.gerarErro();
-            
-            if(objetoBissexao.getErro() < 0.0){
-                objetoBissexao.setErro( objetoBissexao.getErro() * (-1) );
+                objetoBissexao.setIntervaloSuperior(objetoBissexao.getEstimativa());
+                objetoBissexao.setFAnterior(fC);
             }
             
             objetoBissexao.gerarEstimativa();
             contador++;
-        }
+        } while( Math.abs( objetoBissexao.getIntervaloInferior() - objetoBissexao.getIntervaloSuperior() ) >= objetoBissexao.getErro() && contador < limiteDeInteracoes);
     } // Fim de metodo bissexao
     
     /* O ponto chave aqui é a estimativa!!! */
@@ -106,10 +94,11 @@ public class Main{
             funcao = conteudoDoArquivo.get(0);
             intervaloSuperior = Double.parseDouble(conteudoDoArquivo.get(1));
             intervaloInferior = Double.parseDouble(conteudoDoArquivo.get(2));
+            tolerancia = Double.parseDouble(conteudoDoArquivo.get(3));
 
             /* so executa abaixo se a lista retornada tiver tamanho */
-            if(conteudoDoArquivo.size() > 3){
-                limiteDeInteracoes = Integer.parseInt(conteudoDoArquivo.get(3));
+            if(conteudoDoArquivo.size() > 4){
+                limiteDeInteracoes = Integer.parseInt(conteudoDoArquivo.get(4));
             }
         }
         

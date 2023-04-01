@@ -82,10 +82,10 @@ public class Main{
             funcao = conteudoDoArquivo.get(0);
             limiteA = Double.parseDouble(conteudoDoArquivo.get(1));
             limiteB = Double.parseDouble(conteudoDoArquivo.get(2));
-
+            tolerancia = Double.parseDouble(conteudoDoArquivo.get(3));
             /* so executa abaixo se a lista retornada tiver tamanho */
-            if(conteudoDoArquivo.size() > 3){
-                limiteDeIteracoes = Integer.parseInt(conteudoDoArquivo.get(3));
+            if(conteudoDoArquivo.size() > 4){
+                limiteDeIteracoes = Integer.parseInt(conteudoDoArquivo.get(4));
             }
         }
         
