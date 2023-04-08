@@ -17,7 +17,7 @@ escreverEmArquivo <- function(arquivoDeEscrita, dados){
   write.table(x = dados, file = arquivoDeEscrita, sep = "\t", append = F, row.names = F, col.names = F)
 }
 
-metodoJacobi <- function(matrizA, vetorB, tolerancia=9e-7, maximoDeIteracoes=100){
+metodoJacobi <- function(matrizA, vetorB, tolerancia=9e-7, maximoDeIteracoes=10){
   contador <- 0
   auxiliar <- rep(0, length(vetorB) )
   vetorX <- auxiliar
@@ -32,17 +32,17 @@ metodoJacobi <- function(matrizA, vetorB, tolerancia=9e-7, maximoDeIteracoes=100
         }
       } # for interno
       
-      vetorX[i] <- (vetorB[i]-somatorio) / matrizA[i, i]
+      vetorX[i] <- (vetorB[i] - somatorio) / matrizA[i, i]
     } # for externo
     
-    erroRelativo <- abs( abs( sum(vetorX) - sum(auxiliar) ) / sum(vetorX) )
+    erroRelativo <- abs(( max(vetorX) - max(auxiliar) ) / max(vetorX) )
     
-    if(erroRelativo < tolerancia){
+    if(erroRelativo <= tolerancia){
       break
     }
     
     auxiliar <- vetorX
-    contator <- contador + 1
+    contador <- contador + 1
   }
   
   return(vetorX)
@@ -69,7 +69,7 @@ main <- function(){
   }
   
   vetorX <- metodoJacobi(matrizA, vetorB, tolerancia, maximoDeIteracoes)  # um vetor
-  
+
   escreverEmArquivo(arquivoDeEscrita, vetorX)
 }
 

@@ -36,13 +36,11 @@ substituicaoReversa <- function(U, Y){
     
     for( j in i:length(Y) ){
       somatorio = somatorio - ( U[i, j] * vetorX[j] )
-      print(vetorX[j])
     } # for interno
     
     vetorX[i] <- somatorio / U[i, i]
   } # for externo
   
-  print(vetorX)
   return(vetorX)
 }
 
@@ -114,8 +112,8 @@ main <- function(){
   listaDecomposta <- decomposicaoLU(matrizA, vetorB)  # uma lista de matrizes
   vetorX <- resolucaoLU(listaDecomposta, vetorB)      # um vetor
   
-  #print(vetorX)
-  #escreverEmArquivo(arquivoDeEscrita, vetorX)
+  
+  escreverEmArquivo(arquivoDeEscrita, vetorX)
 }
 
 ### lembrando

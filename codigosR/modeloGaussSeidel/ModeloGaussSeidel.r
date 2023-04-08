@@ -17,45 +17,24 @@ escreverEmArquivo <- function(arquivoDeEscrita, dados){
   write.table(x = dados, file = arquivoDeEscrita, sep = "\t", append = F, row.names = F, col.names = F)
 }
 
-modeloGaussSeidel <- function(matrizA, vetorB, tolerancia=9e-7, maximoDeIteracoes=100){
+modeloGaussSeidel <- function(matrizA, vetorB, tolerancia=9e-7, maximoDeIteracoes=10){
   contador <- 0
-  x0 <- vetorB
-  
-  for( i in 1:length(vetorB) ){
-    if( abs(matrizA[i, i]) ){
-      x0[i] <- vetorB[i] / matrizA[i, i]
-    }
-    
-    else{
-      break
-    }
-  }
-  
-  xK <- x0
+  xK <- rep(0, length(vetorB))
   
   while(contador < maximoDeIteracoes){
     for( i in 1:length(vetorB) ){
-      somatorio <- 0.0
+      somatorio <- 0
       
       for( j in 1:length(vetorB) ){
-        if( i > j ){
+        if(i != j){
           somatorio <- somatorio + ( matrizA[i, j] * xK[j] )
-        }
-        
-        else if(i < j){
-          somatorio <- somatorio + ( matrizA[i, j] * x0[j] )
         }
       } # for interno
       
-      xK[i] <- ( 1 / matrizA[i, i] ) * ( vetorB[i] - somatorio )
+      xK[i] <- (vetorB[i] - somatorio) / matrizA[i, i]
     } # for externo
     
-    erroRelativo <- abs(( sum(xK) - sum(x0) ) / sum(xK) )
-    
-    if(erroRelativo <= tolerancia){
-      break
-    }
-    contator <- contador + 1
+    contador <- 1 + contador
   }
   
   return(xK)
@@ -80,10 +59,10 @@ main <- function(){
   if(length(dadosLidos) > 1){
     maximoDeIteracoes <- dadosLidos[2]
   }
-  
+
   vetorX <- modeloGaussSeidel(matrizA, vetorB, tolerancia, maximoDeIteracoes)  # um vetor
-  
-  escreverEmArquivo(arquivoDeEscrita, vetorX)
+  print(vetorX)
+  #escreverEmArquivo(arquivoDeEscrita, vetorX)
 }
 
 main()
