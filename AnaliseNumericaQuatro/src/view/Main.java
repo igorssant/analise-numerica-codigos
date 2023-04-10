@@ -61,7 +61,7 @@ public class Main{
             objetoSecante.gerarNovoXKMaisUm();
             objetoSecante.gerarErro();
             
-            if(objetoSecante.getErro() < 0.00000000003){
+            if(objetoSecante.getErro() < objetoSecante.getTolerancia()){
                 break;
             }
 

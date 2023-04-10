@@ -12,7 +12,7 @@ import org.mariuszgromada.math.mxparser.Expression;
 import org.mariuszgromada.math.mxparser.Function;
 import utils.LidarComArquivo;
 
-public class Main {
+public class Main{
     /* Objeto com escopo de classe */
     public static MetodoNewtonRaphson objetoNewton;
     
