@@ -1,5 +1,5 @@
 # favor rodar a linha abaixo sempre que iniciar o R-studio
-#setwd("~/Documents/trabalho/codigosR/modeloLU")
+setwd("~/Documents/trabalho/codigosR/modeloLU")
 
 # funcao para ler os parametros necessarios em aquivo .txt
 lerDeArquivo <- function(arquivoDeLeitura){

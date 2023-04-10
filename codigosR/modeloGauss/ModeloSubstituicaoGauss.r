@@ -1,5 +1,5 @@
 # favor rodar a linha abaixo sempre que iniciar o R-studio
-#setwd("~/Documents/trabalho/codigosR/modeloGauss")
+setwd("~/Documents/trabalho/codigosR/modeloGauss")
 
 # funcao para ler os parametros necessarios em aquivo .txt
 lerDeArquivo <- function(arquivoDeLeitura){
@@ -56,7 +56,7 @@ main <- function(){
   corte <- (nrow(dadosLidos)) - 1
   tamanho <- (nrow(dadosLidos))
   
-  matrizA <- dadosLidos[1:corte, 1:corte]     # uma matriz
+  matrizA <- dadosLidos[1:corte,]             # uma matriz
   vetorB <- dadosLidos[tamanho,]              # um vetor
   vetorX <- eliminacaoGauss(matrizA, vetorB)  # um vetor
   

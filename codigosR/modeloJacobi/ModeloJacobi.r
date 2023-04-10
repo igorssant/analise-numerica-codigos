@@ -1,5 +1,5 @@
 # favor rodar a linha abaixo sempre que iniciar o R-studio
-#setwd("~/Documents/trabalho/codigosR/modeloJacobi")
+setwd("~/Documents/trabalho/codigosR/modeloJacobi")
 
 # funcao para ler os parametros necessarios em aquivo .txt
 lerDeArquivo <- function(arquivoDeLeitura){
