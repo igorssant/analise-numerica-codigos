@@ -6,11 +6,14 @@ source("~/Documents/trabalho/codigosR/aproximacaoPolinomialDiscreto/normalizaMat
 source("~/Documents/trabalho/codigosR/aproximacaoPolinomialDiscreto/permutacaoLinha.r")
 
 lerDeArquivo <- function(nomeArquivo="entradaDeDados.txt"){
-  
+  listaDeArgumentosLidos <- scan(nomeArquivo)
+  ordem <- listaDeArgumentosLidos[1]
+  resto <- listaDeArgumentosLidos[2:length(listaDeArgumentosLidos)]
+  return(list(O = ordem, R = resto))
 }
 
 escreverEmArquivo <- function(nomeArquivo="saidaDeDados.txt", dados=NaN){
-  
+  write(dados, nomeArquivo, sep = "\n")
 }
 
 erroPadrao <- function(soma_r, tamanho, nro_equacoes){
@@ -42,9 +45,9 @@ regressaoPolinomial <- function(pontos, ordem){
 }
 
 main <- function(){
-  ordem_polinomio <- 2
-  pontos <- matrix(c(-1, 0, 1, 2,
-                      0, -1, 0, 7), ncol = 4, nrow = 2, byrow = T)
+  listaDeConteudoLido <- lerDeArquivo()
+  ordem_polinomio <- listaDeConteudoLido$O
+  pontos <- matrix(listaDeConteudoLido$R, nrow = 2, byrow = T)
   
   if(ncol(pontos) < (ordem_polinomio + 1)){
     print("Não é possível realizar a regressão")
@@ -53,7 +56,6 @@ main <- function(){
   }
   
   listaDeMatrizes <- regressaoPolinomial(pontos, ordem_polinomio)
-  #listaDeMatrizes$X <- normalizar(listaDeMatrizes$X)
   print(listaDeMatrizes)
   print(permutaLinhas(listaDeMatrizes$X, listaDeMatrizes$Y))
   Y <- listaDeMatrizes$Y
@@ -62,8 +64,7 @@ main <- function(){
   aproximacao <- resolucaoLU(listaDeMatrizes, Y)
   
   print(aproximacao)
+  escreverEmArquivo(dados = aproximacao)
 }
 
 main()
-
-#http://www.inf.ufes.br/~avalli/calc_num/aulas/interpolacaoSemPausa.pdf

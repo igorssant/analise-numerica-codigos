@@ -1,11 +1,17 @@
 setwd("~/Documents/trabalho/codigosR/minimosQuadrados/")
 
 lerDeArquivo <- function(nomeArquivo="entradaDeDados.txt"){
-  
+  listaDeArgumentosLidos <- scan(nomeArquivo)
+  metade <- length(listaDeArgumentosLidos) / 2
+  x <- listaDeArgumentosLidos[1: metade]
+  fx <- listaDeArgumentosLidos[(metade+1):length(listaDeArgumentosLidos)]
+  return(list(X = x, FX = fx))
 }
 
 escreverEmArquivo <- function(nomeArquivo="saidaDeDados.txt", dados=NULL){
-  
+  sink(nomeArquivo)
+  print(dados)
+  sink()
 }
 
 desvioPadrao <- function(vetor){
@@ -109,16 +115,23 @@ regressaoLinear <- function(vetor_1, vetor_2){
 }
 
 main <- function(){
-  vetor <- c(1:10)
-  vetor_2 <- c(11:20)
+  listaDeConteudoLido <- lerDeArquivo()
+  vetor <- listaDeConteudoLido$X
+  vetor_2 <- listaDeConteudoLido$FX
   desvio <- desvioPadrao(vetor)
   variancia <- variancia(vetor)
   coeficiente <- coeficienteDeVariacao(vetor)
   regressao <- regressaoLinear(vetor, vetor_2)
   print(desvio)
   print(variancia)
-  print(paste(round(coeficiente, 2), "%"))
+  print(paste(round(coeficiente/100, 2), "%"))
   print(regressao)
+  escreverEmArquivo(
+    dados = list(
+      paste("sd =", desvio),
+      paste("var =", variancia),
+      paste("coef =", coeficiente/100, "%"), regressao)
+  )
 }
 
 main()

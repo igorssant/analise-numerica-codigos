@@ -1,11 +1,16 @@
 setwd("~/Documents/trabalho/codigosR/interpolacaoNewton/")
 
 lerDeArquivo <- function(nomeArquivo = "entradaDeDados.txt"){
-  
+  listaDeArgumentosLidos <- scan(nomeArquivo, dec = ".")
+  metade <- floor(length(listaDeArgumentosLidos)/2)
+  ponto <- listaDeArgumentosLidos[1]
+  x <- listaDeArgumentosLidos[2:(metade+1)]
+  fx <- listaDeArgumentosLidos[(metade+2):length(listaDeArgumentosLidos)]
+  return(list(P = ponto, X = x, FX = fx))
 }
 
 escreverEmArquivo <- function(nomeArquivo = "saidaDeDados.txt", dados=NULL){
-  
+  write(dados, nomeArquivo, sep = "\n")
 }
 
 diferencasDivididas <- function(vetor_x, vetor_y){
@@ -40,14 +45,17 @@ interpolacaoNewton <- function(vetor_x, vetor_y, ponto_atual, tabelaDiferencas){
 }
 
 main <- function(){
+  listaDoConteudoLido <- lerDeArquivo()
+  # O ponto para interpolar
+  ponto <- listaDoConteudoLido$P
   # x
-  vetor1 <- c(1, 4, 6, 5)
+  vetor1 <- listaDoConteudoLido$X
   # f(x)
-  vetor2 <- c(0, 1.386294, 1.791760, 1.609438)
-  
+  vetor2 <- listaDoConteudoLido$FX
   tabela <- diferencasDivididas(vetor1, vetor2)
 
-  print(interpolacaoNewton(vetor1, vetor2, 2, tabela))
+  print(tabela)
+  print(interpolacaoNewton(vetor1, vetor2, ponto, tabela))
   
 }
 

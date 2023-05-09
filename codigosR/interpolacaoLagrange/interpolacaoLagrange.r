@@ -1,11 +1,16 @@
 setwd("~/Documents/trabalho/codigosR/interpolacaoLagrange/")
 
 lerDeArquivo <- function(nomeArquivo="entradaDeDados.txt"){
-  
+  listaDeArgumentosLidos <- scan(nomeArquivo)
+  metade <- floor(length(listaDeArgumentosLidos)/2)
+  ponto <- listaDeArgumentosLidos[1]
+  x <- listaDeArgumentosLidos[2:(metade+1)]
+  fx <- listaDeArgumentosLidos[(metade+2):length(listaDeArgumentosLidos)]
+  return(list(P = ponto, X = x, FX = fx))
 }
 
-escreverEmArquivo <- function(nomeArquivo="saidaDeDados.txt", dados=NULL){
-  
+escreverEmArquivo <- function(nomeArquivo="saidaDeDados.txt", dados=NaN){
+  write(dados, nomeArquivo, sep = "\n")
 }
 
 lagrange <- function(vetor_x, vetor_y, ponto_atual){
@@ -28,12 +33,14 @@ lagrange <- function(vetor_x, vetor_y, ponto_atual){
 }
 
 main <- function(){
-  vetor1 <- c(5, 7, 11, 13, 17)
-  vetor2 <- c(150, 392, 1452, 2366, 5202)
+  listaDeConteudoLido <- lerDeArquivo()
+  pontoDeInterpolacao <- listaDeConteudoLido$P
+  vetor1 <- listaDeConteudoLido$X
+  vetor2 <- listaDeConteudoLido$FX
 
-  resultado <- lagrange(vetor1, vetor2, 9)
+  resultado <- lagrange(vetor1, vetor2, pontoDeInterpolacao)
   
-  print(resultado)
+  escreverEmArquivo(dados=resultado)
 }
 
 main()
