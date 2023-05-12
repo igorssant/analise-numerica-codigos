@@ -2,20 +2,20 @@ package view;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import static java.lang.Double.NaN;
 import java.util.ArrayList;
-import model.Integral;
 import utils.LidarComArquivo;
-import controller.IntegralMultiplaTrapezio;
-import java.util.Arrays;
+import controller.IntegralMultiplaSimp38;
+/* import controller.IntegralMultiplaTrapezio; */
 import model.RegressaoPolinomial;
+import model.TresOitavos;
+/* import model.Integral; */
 
 /**
  * @author igorsssantana
  */
 public class RegressaoPolinomialContinua{
     /* ESCOPO DE CLASSE */
-    private static Integral multiQuadrados;
+    private static TresOitavos integral;
     private static RegressaoPolinomial resultado;
     
     /**
@@ -54,12 +54,11 @@ public class RegressaoPolinomialContinua{
         }
         
         for(int i = 0; i < ordem-1; i++){
-            matrizResultante[0][i] = IntegralMultiplaTrapezio.integralMultiplaTrapezio("f(x) = " + vetorDeFuncoes[i], multiQuadrados);
-            vetorY[i] = IntegralMultiplaTrapezio.integralMultiplaTrapezio(
+            matrizResultante[0][i] = IntegralMultiplaSimp38.integralMultiTresOitavos("f(x) = " + vetorDeFuncoes[i], integral);
+            vetorY[i] = IntegralMultiplaSimp38.integralMultiTresOitavos(
                     (new StringBuilder()).append(funcao).append(" * (").append(vetorDeFuncoes[i] + ")").toString(),
-                    multiQuadrados
+                    integral
             );
-            System.out.println(vetorY[i]);
         }
         
         for(int i = 0; i < ordem-1; i++){
@@ -69,9 +68,9 @@ public class RegressaoPolinomialContinua{
                 }
                 
                 else{
-                    matrizResultante[i][j] = IntegralMultiplaTrapezio.integralMultiplaTrapezio(
+                    matrizResultante[i][j] = IntegralMultiplaSimp38.integralMultiTresOitavos(
                             (new StringBuilder()).append("f(x) = ").append("(" + vetorDeFuncoes[i]).append(") * (").append(vetorDeFuncoes[j] + ")").toString(),
-                            multiQuadrados
+                            integral
                     );
                 }
             }
@@ -119,10 +118,8 @@ public class RegressaoPolinomialContinua{
             System.out.println("1- Ocorreu um erro inesperado!\nPor favor tente novamente.");
         }
         
-        
-        multiQuadrados = new Integral(pontos);
-        multiQuadrados.setIntervalo(1);
-        multiQuadrados.gerarNovoH();
+        integral = new TresOitavos(pontos[0], pontos[1]);
+        integral.setIntervalo(3);
         parteUmDaRegressao(funcao, ordem);
         
         try{
