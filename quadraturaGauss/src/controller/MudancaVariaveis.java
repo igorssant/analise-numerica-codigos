@@ -1,4 +1,7 @@
 package controller;
+
+import java.util.ArrayList;
+
 /**
  * @author igorsssantana
  */
@@ -24,5 +27,28 @@ public class MudancaVariaveis{
         String auxiliar = funcao.substring(7);
         funcao = (new StringBuilder()).append("f(x) = ").append(auxiliar.replaceAll("x", novaString)).toString();
         return funcao;
+    }
+    
+    public static ArrayList<String> retiraTchebyshev(String funcao){
+        int indiceDivisao = funcao.indexOf("/"),
+                indiceRaiz = funcao.indexOf("sqrt("),
+                indiceParentese = funcao.indexOf(")", indiceRaiz);
+        String temp = "";
+        ArrayList<String> lista = new ArrayList<>();
+        
+        /* RETORNA A POSICAO DA LETRA 's' de "sqrt(" */
+        while(indiceRaiz < indiceDivisao){
+            indiceRaiz = funcao.indexOf("sqrt(", indiceDivisao);
+            indiceParentese = funcao.indexOf(")", indiceRaiz);
+        }
+        
+        temp = (new StringBuilder()).append(funcao.substring(indiceRaiz, indiceParentese)).append(")").toString();
+        funcao = funcao.replace(temp, "1");
+        temp = (new StringBuilder()).append("1/(").append(temp).append(")").toString();
+        System.out.println(funcao);
+        lista.add(temp);
+        lista.add(funcao);
+        
+        return lista;
     }
 }

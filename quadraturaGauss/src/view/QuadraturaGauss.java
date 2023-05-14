@@ -1,13 +1,14 @@
 package view;
 
-import controller.Funcao;
-import controller.MudancaVariaveis;
+import controller.CalculaModelosMatematicos;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import static java.lang.Double.NaN;
 import java.util.ArrayList;
 import model.Integral;
+import model.TabelaHermite;
+import model.TabelaLaguerre;
 import model.TabelaLegendre;
+import model.TabelaTchebyshev;
 import utils.LidarComArquivo;
 
 /**
@@ -16,32 +17,36 @@ import utils.LidarComArquivo;
 public class QuadraturaGauss{
     /* ESCOPO DE CLASSE */
     private static Integral integral;
+    private static TabelaHermite tabelaHermite;
+    private static TabelaLaguerre tabelaLaguerre;
     private static TabelaLegendre tabelaLegendre;
+    private static TabelaTchebyshev tabelaTchebyshev;
     
-    /**
-     * Nao possui retorno
-     * recebe como parametro
-     * a funcao original
-     * @param funcao 
-     */
-    public static void QuadraturaDeGauss(String funcao){
-        String novoX = MudancaVariaveis.novoX(integral.getLimiteInferior(), integral.getLimiteSuperior());
-        
-        funcao = MudancaVariaveis.contatenaFuncaoString(funcao, novoX);
-        System.out.println(funcao);
-        funcao = MudancaVariaveis.novoDx(funcao, integral.getLimiteInferior(), integral.getLimiteSuperior());
-        integral.setIntegralCalculada(0f);
-        
-        System.out.println(funcao);
-        
-        for(int i = 0; i < tabelaLegendre.getQuantidadePontos(); i++){
-            integral.setIntegralCalculada(
-                    integral.getIntegralCalculada() +
-                    tabelaLegendre.getPeso(i) * Funcao.funcao(
-                            funcao,
-                            tabelaLegendre.getArgumento(i)
-                    )
-            );
+    public static void escolherModeloMatematico(String funcao, String modelo, int qtdPontos){
+        switch(modelo){
+            case "hermite":
+                tabelaHermite = new TabelaHermite(qtdPontos);
+                integral = CalculaModelosMatematicos.hermite(funcao, integral, tabelaHermite);
+                break;
+            
+            case "laguerre":
+                tabelaLaguerre = new TabelaLaguerre(qtdPontos);
+                integral = CalculaModelosMatematicos.laguerre(funcao, integral, tabelaLaguerre);
+                break;
+            
+            case "legendre":
+                tabelaLegendre = new TabelaLegendre(qtdPontos);
+                integral = CalculaModelosMatematicos.legendre(funcao, integral, tabelaLegendre);
+                break;
+            
+            case "tchebyshev":
+                tabelaTchebyshev = new TabelaTchebyshev(qtdPontos);
+                integral = CalculaModelosMatematicos.tchebyshev(funcao, integral, tabelaTchebyshev);
+                break;
+                
+            default:
+                System.out.println("Erro!\nFunção escolhida não é reconhecida pelo sistema.\nTente novamente.");
+                System.exit(-1);
         }
     }
     
@@ -52,11 +57,11 @@ public class QuadraturaGauss{
      */
     public static void main(String[] args) throws IOException, FileNotFoundException, NumberFormatException{
         ArrayList<String> conteudoDoArquivo;
-        String funcao = "";
+        String funcao = "",
+                modelo = "legendre";
         int qtdPontos = 0;
         double limiteInferior = 0f,
                 limiteSuperior = 0f;
-        double[] pontos = null;
         
         try{
             conteudoDoArquivo = new ArrayList<>(LidarComArquivo.lerDeArquivo());
@@ -64,10 +69,9 @@ public class QuadraturaGauss{
             qtdPontos = Integer.parseInt(conteudoDoArquivo.get(1));
             limiteInferior = Double.parseDouble(conteudoDoArquivo.get(2));
             limiteSuperior = Double.parseDouble(conteudoDoArquivo.get(3));
-            pontos = new double[qtdPontos];
             
-            for(int i = 0; i < qtdPontos; i++){
-                pontos[i] = Double.parseDouble(conteudoDoArquivo.get(i+4));
+            if(conteudoDoArquivo.size() > 4){
+                modelo = conteudoDoArquivo.get(4).toLowerCase();
             }
             
             conteudoDoArquivo.clear();
@@ -89,9 +93,8 @@ public class QuadraturaGauss{
             System.out.println("1- Ocorreu um erro inesperado!\nPor favor tente novamente.");
         }
         
-        integral = new Integral(limiteInferior, limiteSuperior, pontos);
-        tabelaLegendre = new TabelaLegendre(qtdPontos);
-        QuadraturaDeGauss(funcao);
+        integral = new Integral(limiteInferior, limiteSuperior);
+        escolherModeloMatematico(funcao, modelo, qtdPontos);
         
         try{
             LidarComArquivo.escreverEmArquivo(integral.getIntegralCalculada());

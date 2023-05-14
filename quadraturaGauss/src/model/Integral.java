@@ -6,7 +6,6 @@ public class Integral{
     private double limiteInferior;
     private double limiteSuperior;
     private double integralCalculada;
-    private double[] pontos;
 
     /**
      * Construtor vazio
@@ -39,33 +38,6 @@ public class Integral{
         this.integralCalculada = integralCalculada;
     }
 
-    /**
-     * Construtor principal da classe
-     * recebe a, b e o vetor de pontos
-     * @param limiteInferior
-     * @param limiteSuperior
-     * @param pontos 
-     */
-    public Integral(double limiteInferior, double limiteSuperior, double[] pontos){
-        this.limiteInferior = limiteInferior;
-        this.limiteSuperior = limiteSuperior;
-        this.pontos = pontos;
-    }
-
-    /**
-     * Contrutor completo da classe
-     * @param limiteInferior
-     * @param limiteSuperior
-     * @param integralCalculada
-     * @param pontos 
-     */
-    public Integral(double limiteInferior, double limiteSuperior, double integralCalculada, double[] pontos){
-        this.limiteInferior = limiteInferior;
-        this.limiteSuperior = limiteSuperior;
-        this.integralCalculada = integralCalculada;
-        this.pontos = pontos;
-    }
-
     public double getLimiteInferior(){
         return this.limiteInferior;
     }
@@ -88,17 +60,5 @@ public class Integral{
 
     public void setIntegralCalculada(double integralCalculada){
         this.integralCalculada = integralCalculada;
-    }
-
-    public double[] getPontos(){
-        return this.pontos;
-    }
-    
-    public double getPontos(int indice){
-        return this.pontos[indice];
-    }
-
-    public void setPontos(double[] pontos){
-        this.pontos = pontos;
     }
 }
